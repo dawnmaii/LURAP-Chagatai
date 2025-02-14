@@ -8,9 +8,13 @@
    # word
    # number of times occurred
    # lines (as arraylist)
+   # need to string method somewhere to easy access
+   # setter methods?
 
 # create dictionary to keep words in
    # word object : text it occurred in
+
+# method to traverse dictionary to find the word
 
 # loop
    # if we haven't seen it before, create a new word object w/ line number
@@ -18,7 +22,10 @@
       # add word : text name to dictionary
    # if we've seen it 
       # increment count by 1
-      # get line number, append
+      # get line number, append to arraylist
 
 # output dictionary as .csv
-   # print word, number of times occurred, lines occurred in
+   # create .csv file
+   # loop
+      # for each word in dictionary
+      # print word, word object.number of times, word object.lines.as string, .txt file name
