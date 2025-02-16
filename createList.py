@@ -1,28 +1,57 @@
-# takes a .txt file as input, outputs .csv file
-
 # access .txt file to parse
+with open('QAZ19th-text05-transcription.txt') as txt_file:
+   output = txt_file.read()   
 
-# split the input so every 'word' is by itself
+# .txt file shows everything as a one-line string so we can split the string
+list = output.split()
+
+current_line = None
+# create dictionary to keep words in
+   # word object : text it occurred in
+dictionary = {}
 
 # create word object
    # word
    # number of times occurred
-   # lines (as arraylist)
+   # lines (as list)
    # need to string method somewhere to easy access
    # setter methods?
+class Word:
+   """Represents in individual word in the text file."""
 
-# create dictionary to keep words in
-   # word object : text it occurred in
+   def __init__(self, word):
+      """Creates the word upon parsing input."""
+      self.word = word
+      self.num_occur = 1
+      self.line_occur = [current_line]
 
-# method to traverse dictionary to find the word
+   def increase_count():
+      num_occur += 1
 
-# loop
+# parsing everything in list, which includes line numbers
+for word in list:
+   # print("\nat " + word)
+   # if the word is a line number, we are on that line
+   if "(" and ")" in word:
+      current_line = word
+      print (" current_line is " + current_line)
    # if we haven't seen it before, create a new word object w/ line number
-      # get text name
-      # add word : text name to dictionary
-   # if we've seen it 
-      # increment count by 1
-      # get line number, append to arraylist
+   # if we've seen it, increment count by 1 and get the line number to append if different
+   if word == current_line:
+      continue
+
+   # this block doesn't work, currently troubleshooting
+   if word in dictionary.keys():
+      word.increase_count()
+      print(word + " increased count!")
+      if current_line not in dictionary.get(word[1]):
+         word[1].append(current_line)
+   
+   
+   else:
+      new_word = Word(word)
+      dictionary.update({new_word : [new_word.num_occur, new_word.line_occur]})
+      print("added a new word: " + word)
 
 # output dictionary as .csv
    # create .csv file
