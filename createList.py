@@ -1,25 +1,32 @@
-﻿# access .txt file to parse
-with open('QAZ19th-text05-transcription.txt', encoding='utf-8-sig') as txt_file:
+﻿with open('QAZ19th-text05-transcription.txt', encoding='utf-8-sig') as txt_file:
    output = txt_file.read()   
 
-# .txt file shows everything as a one-line string so we can split the string
 list = output.split()
 
 current_line = None
-# create dictionary to keep words in
-   # word object : [number of times occurred, line numbers occurred in]
+
 dictionary = {}
 
-# parsing everything in list, which includes line numbers
+# remove periods, ellipses, quotation marks, apostrophes, commas
+# 2-nci on lines 11, 60 and 3-nci on lines 12, 63 and 4-nci are technically the same
+def remove_punctuation(word):
+   cleaned_word = word
+
+
+   return cleaned_word.lower()
+
 for word in list:
+
    if "(" and ")" in word:
       remove_left_bracket = word.replace("(", "")
       removed_brackets = remove_left_bracket.replace(")", "")
       current_line = removed_brackets
       continue
+   
+   if word.isdigit():
+      continue
 
-   # filter out numbers
-   # figure out capitalized vs. uncapitalized of the same words
+   word = remove_punctuation(word)
    
    if word in dictionary.keys():
       dictionary.get(word)[0] += 1
@@ -32,7 +39,7 @@ for word in list:
 
 for key, value in dictionary.items():
    print(key, value)
-   
+
 # output dictionary as .csv
    # create .csv file
    # loop
