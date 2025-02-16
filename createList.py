@@ -7,15 +7,10 @@ list = output.split()
 
 current_line = None
 # create dictionary to keep words in
-   # word object : text it occurred in
+   # word object : [number of times occurred, line numbers occurred in]
 dictionary = {}
 
 # create word object
-   # word
-   # number of times occurred
-   # lines (as list)
-   # need to string method somewhere to easy access
-   # setter methods?
 class Word:
    """Represents in individual word in the text file."""
 
@@ -30,13 +25,11 @@ class Word:
 
 # parsing everything in list, which includes line numbers
 for word in list:
-   # print("\nat " + word)
-   # if the word is a line number, we are on that line
+      # print("\nat " + word)
    if "(" and ")" in word:
       current_line = word
-      print (" current_line is " + current_line)
-   # if we haven't seen it before, create a new word object w/ line number
-   # if we've seen it, increment count by 1 and get the line number to append if different
+      #print (" current_line is " + current_line)
+
    if word == current_line:
       continue
 
