@@ -1,6 +1,4 @@
-﻿import csv
-
-# accesses the .txt file in current directory
+﻿# accesses the .txt file in current directory
 with open('QAZ19th-text05-transcription.txt', encoding='utf-8-sig') as txt_file:
    output = txt_file.read()   
 
@@ -16,6 +14,7 @@ dictionary = {}
 # function to remove most punctuation from the word
 def remove_punctuation(word):
    cleaned_word = word
+
    # removes ASCII quotation marks
    if "\u201C" in word:
       remove_left_quote = cleaned_word.replace("\u201C", "")
@@ -23,22 +22,27 @@ def remove_punctuation(word):
    if "\u201D" in word:
       remove_right_quote = cleaned_word.replace("\u201D", "")
       cleaned_word = remove_right_quote
+
    # removes periods
    if "." in word:
        remove_period = cleaned_word.replace(".", "")
        cleaned_word = remove_period
+
    # removes commas
    if "," in word:
       remove_comma = cleaned_word.replace(",", "")
       cleaned_word = remove_comma
+
    # removes colons
    if ":" in word:
       remove_colon = cleaned_word.replace(":", "")
       cleaned_word = remove_colon
+
    # removes semicolons
    if ";" in word:
       remove_semicolon = cleaned_word.replace(";", "")
       cleaned_word = remove_semicolon
+
    # converts the letter to lowercase
    return cleaned_word.lower()
 
@@ -57,13 +61,17 @@ for word in list:
       removed_brackets = remove_left_bracket.replace(")", "")
       current_line = removed_brackets
       continue
+
    # skips the word if it is a number (not hyphenated) or ellipses
    if word.isdigit() or word == "…" or word == "..." or word == "\u2026":
       continue
+
    # if the word starts with a number, remove said number
    word = remove_numbers(word)
+
    # removes punctuation before processing
    word = remove_punctuation(word)
+
    # checks the dictionary to see if the word already exists
    if word in dictionary.keys():
       # if it does, increase the word count and add the line where it occurs next
@@ -74,12 +82,15 @@ for word in list:
    else:
       dictionary.update({word : [int(1), [int(current_line)]]})
 
-# prints out the dictionary at the end to the console
-for key, value in dictionary.items():
-   print(key, value)
-
-# output dictionary as .csv
-   # create .csv file
-   # loop
-      # for each word in dictionary
-      # print word, word object.number of times, word object.lines.as string, .txt file name
+# writes the dictionary to a csv file, every word has its own line
+output = "output.csv"
+with open(output, "w", newline="") as file:
+    # writing the header manually
+    file.write("word,number of occurrences,lines\n")  
+    for word in dictionary:
+        # {', '.join(map(str, dictionary[word][1]))} = lines
+         # map(str, dictionary[word][1]) converts each number in the list to a string
+         # ', '.join takes that list of strings and concats them, with , as delimiter
+         # f" " formats the line without quotation marks
+        line = f"{word},{dictionary[word][0]},[{', '.join(map(str, dictionary[word][1]))}]\n"
+        file.write(line)
