@@ -1,5 +1,8 @@
-﻿# accesses the .txt file in current directory
-with open('QAZ19th-text05-transcription.txt', encoding='utf-8-sig') as txt_file:
+﻿# need to set this to accept user input
+input_file = None
+
+# accesses the .txt file in current directory
+with open(input_file, encoding='utf-8-sig') as txt_file:
    output = txt_file.read()   
 
 # converts .txt file input into a list
@@ -25,8 +28,8 @@ def remove_punctuation(word):
 
    # removes periods
    if "." in word:
-       remove_period = cleaned_word.replace(".", "")
-       cleaned_word = remove_period
+      remove_period = cleaned_word.replace(".", "")
+      cleaned_word = remove_period
 
    # removes commas
    if "," in word:
@@ -83,14 +86,14 @@ for word in list:
       dictionary.update({word : [int(1), [int(current_line)]]})
 
 # writes the dictionary to a csv file, every word has its own line
-output = "output.csv"
-with open(output, "w", newline="") as file:
-    # writing the header manually
-    file.write("word,number of occurrences,lines\n")  
-    for word in dictionary:
-        # {', '.join(map(str, dictionary[word][1]))} = lines
+output_file = input_file + "-table" + ".csv"
+with open(output_file, "w", newline="") as file:
+   # writing the header manually
+   file.write("word,number of occurrences,lines\n")  
+   for word in dictionary:
+      # {', '.join(map(str, dictionary[word][1]))} = lines
          # map(str, dictionary[word][1]) converts each number in the list to a string
          # ', '.join takes that list of strings and concats them, with , as delimiter
          # f" " formats the line without quotation marks
-        line = f"{word},{dictionary[word][0]},[{', '.join(map(str, dictionary[word][1]))}]\n"
-        file.write(line)
+      line = f"{word},{dictionary[word][0]},[{', '.join(map(str, dictionary[word][1]))}]\n"
+      file.write(line)
