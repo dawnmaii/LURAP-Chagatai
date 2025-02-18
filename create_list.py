@@ -1,6 +1,4 @@
-﻿"""Errors"""
-# 2-nci on lines 11, 60 and 3-nci on lines 12, 63 and 4-nci are technically the same
-# unless it's inci?
+﻿import csv
 
 # accesses the .txt file in current directory
 with open('QAZ19th-text05-transcription.txt', encoding='utf-8-sig') as txt_file:
@@ -18,7 +16,7 @@ dictionary = {}
 # function to remove most punctuation from the word
 def remove_punctuation(word):
    cleaned_word = word
-   # removes quotation marks
+   # removes ASCII quotation marks
    if "\u201C" in word:
       remove_left_quote = cleaned_word.replace("\u201C", "")
       cleaned_word = remove_left_quote
@@ -37,8 +35,20 @@ def remove_punctuation(word):
    if ":" in word:
       remove_colon = cleaned_word.replace(":", "")
       cleaned_word = remove_colon
+   # removes semicolons
+   if ";" in word:
+      remove_semicolon = cleaned_word.replace(";", "")
+      cleaned_word = remove_semicolon
    # converts the letter to lowercase
    return cleaned_word.lower()
+
+# function to remove numbers from a word if hypenated with an actual word
+def remove_numbers(word):
+   cleaned_word = word
+   for char in cleaned_word:
+      if char.isdigit():
+         cleaned_word = cleaned_word.replace(char, "")
+   return cleaned_word
    
 for word in list:
    # skips the "word" if it's a line number marker
@@ -47,13 +57,13 @@ for word in list:
       removed_brackets = remove_left_bracket.replace(")", "")
       current_line = removed_brackets
       continue
-   # skips the word if it is a number or ellipses
-   if word.isdigit() or word == "…" or word == "...":
+   # skips the word if it is a number (not hyphenated) or ellipses
+   if word.isdigit() or word == "…" or word == "..." or word == "\u2026":
       continue
-
-   # removes punctuation before processing, see example above
+   # if the word starts with a number, remove said number
+   word = remove_numbers(word)
+   # removes punctuation before processing
    word = remove_punctuation(word)
-
    # checks the dictionary to see if the word already exists
    if word in dictionary.keys():
       # if it does, increase the word count and add the line where it occurs next
