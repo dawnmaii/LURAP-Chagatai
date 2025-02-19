@@ -1,5 +1,5 @@
 ﻿# need to set this to accept user input
-input_file = None
+input_file = "QAZ19th-text24-transcription.txt"
 
 # accesses the .txt file in current directory
 with open(input_file, encoding='utf-8-sig') as txt_file:
@@ -46,6 +46,11 @@ def remove_punctuation(word):
       remove_semicolon = cleaned_word.replace(";", "")
       cleaned_word = remove_semicolon
 
+   # removes question mark
+   if "?" in word:
+      remove_question = cleaned_word.replace("?", "")
+      cleaned_word = remove_question
+
    # converts the letter to lowercase
    return cleaned_word.lower()
 
@@ -91,9 +96,8 @@ with open(output_file, "w", newline="") as file:
    # writing the header manually
    file.write("word,number of occurrences,lines\n")  
    for word in dictionary:
-      # {', '.join(map(str, dictionary[word][1]))} = lines
-         # map(str, dictionary[word][1]) converts each number in the list to a string
-         # ', '.join takes that list of strings and concats them, with , as delimiter
-         # f" " formats the line without quotation marks
-      line = f"{word},{dictionary[word][0]},[{', '.join(map(str, dictionary[word][1]))}]\n"
+      line = f"{word},{dictionary[word][0]},\"[{', '.join(map(str, dictionary[word][1]))}]\"\n"
+      # line will be written as 
+         # {word, number of occurrences, "[line numbers]"} 
+         # for automatic detection by google sheets
       file.write(line)
