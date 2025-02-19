@@ -62,6 +62,7 @@ def remove_numbers(word):
          cleaned_word = cleaned_word.replace(char, "")
    return cleaned_word
    
+# traverses through list received from .txt file   
 for word in list:
    # skips the "word" if it's a line number marker
    if "(" and ")" in word:
