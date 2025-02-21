@@ -8,7 +8,7 @@ try:
 except FileNotFoundError:
    print(f"Error: The file {input_file} was not found.")
 except Exception as e:
-   print(f"An error occurred: {e}")
+   print(f"Unable to retrieve file: {e}")
 
 # converts .txt file input into a list
 list = output.split()
@@ -22,42 +22,45 @@ dictionary = {}
 # function to remove most punctuation from the word
 def remove_punctuation(word):
    cleaned_word = word
+   try:
+      # removes ASCII quotation marks
+      if "\u201C" in word:
+         remove_left_quote = cleaned_word.replace("\u201C", "")
+         cleaned_word = remove_left_quote
+      if "\u201D" in word:
+         remove_right_quote = cleaned_word.replace("\u201D", "")
+         cleaned_word = remove_right_quote
 
-   # removes ASCII quotation marks
-   if "\u201C" in word:
-      remove_left_quote = cleaned_word.replace("\u201C", "")
-      cleaned_word = remove_left_quote
-   if "\u201D" in word:
-      remove_right_quote = cleaned_word.replace("\u201D", "")
-      cleaned_word = remove_right_quote
+      # removes periods
+      if "." in word:
+         remove_period = cleaned_word.replace(".", "")
+         cleaned_word = remove_period
 
-   # removes periods
-   if "." in word:
-      remove_period = cleaned_word.replace(".", "")
-      cleaned_word = remove_period
+      # removes commas
+      if "," in word:
+         remove_comma = cleaned_word.replace(",", "")
+         cleaned_word = remove_comma
 
-   # removes commas
-   if "," in word:
-      remove_comma = cleaned_word.replace(",", "")
-      cleaned_word = remove_comma
+      # removes colons
+      if ":" in word:
+         remove_colon = cleaned_word.replace(":", "")
+         cleaned_word = remove_colon
 
-   # removes colons
-   if ":" in word:
-      remove_colon = cleaned_word.replace(":", "")
-      cleaned_word = remove_colon
+      # removes semicolons
+      if ";" in word:
+         remove_semicolon = cleaned_word.replace(";", "")
+         cleaned_word = remove_semicolon
 
-   # removes semicolons
-   if ";" in word:
-      remove_semicolon = cleaned_word.replace(";", "")
-      cleaned_word = remove_semicolon
+      # removes question mark
+      if "?" in word:
+         remove_question = cleaned_word.replace("?", "")
+         cleaned_word = remove_question
 
-   # removes question mark
-   if "?" in word:
-      remove_question = cleaned_word.replace("?", "")
-      cleaned_word = remove_question
-
-   # converts the letter to lowercase
-   return cleaned_word.lower()
+      # converts the letter to lowercase
+      return cleaned_word.lower()
+   
+   except Exception as e:
+      print(f"Unable to remove punctuation: {e}")
 
 # function to remove numbers from a word if hypenated with an actual word
 def remove_numbers(word):
@@ -109,4 +112,4 @@ try:
             # for automatic detection by google sheets
          file.write(line)
 except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"Unable to output table: {e}")
