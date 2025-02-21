@@ -1,9 +1,14 @@
 ﻿# need to set this to accept user input
-input_file = "QAZ19th-text24-transcription.txt"
+input_file = None
 
 # accesses the .txt file in current directory
-with open(input_file, encoding='utf-8-sig') as txt_file:
-   output = txt_file.read()   
+try:
+   with open(input_file, encoding='utf-8-sig') as txt_file:
+      output = txt_file.read()   
+except FileNotFoundError:
+   print(f"Error: The file {input_file} was not found.")
+except Exception as e:
+   print(f"An error occurred: {e}")
 
 # converts .txt file input into a list
 list = output.split()
@@ -93,12 +98,15 @@ for word in list:
 
 # writes the dictionary to a csv file, every word has its own line
 output_file = input_file + "-table" + ".csv"
-with open(output_file, "w", newline="") as file:
-   # writing the header manually
-   file.write("word,number of occurrences,lines\n")  
-   for word in dictionary:
-      line = f"{word},{dictionary[word][0]},\"[{', '.join(map(str, dictionary[word][1]))}]\"\n"
-      # line will be written as 
-         # {word, number of occurrences, "[line numbers]"} 
-         # for automatic detection by google sheets
-      file.write(line)
+try:
+   with open(output_file, "w", newline="") as file:
+      # writing the header manually
+      file.write("word,number of occurrences,lines\n")  
+      for word in dictionary:
+         line = f"{word},{dictionary[word][0]},\"[{', '.join(map(str, dictionary[word][1]))}]\"\n"
+         # line will be written as 
+            # {word, number of occurrences, "[line numbers]"} 
+            # for automatic detection by google sheets
+         file.write(line)
+except Exception as e:
+        print(f"An error occurred: {e}")
