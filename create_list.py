@@ -1,20 +1,24 @@
-﻿# need to set this to accept user input
-input_file = None
+﻿import sys
+import os
+
+# Get input file from command line argument (required)
+if len(sys.argv) > 1:
+    input_file = sys.argv[1]
+else:
+    print("❌ ERROR: No input file specified!")
+    print("💡 USAGE: python3 create_list.py filename.txt")
+    print("💡 EXAMPLE: python3 create_list.py QAZ19th-text05-transcription.txt")
+    sys.exit(1)
 
 # accesses the .txt file in current directory
-try:
-   with open(input_file, encoding='utf-8-sig') as txt_file:
-      output = txt_file.read()   
-except FileNotFoundError:
-   print(f"Error: The file {input_file} was not found.")
-except Exception as e:
-   print(f"Unable to retrieve file: {e}")
+with open(input_file, encoding="utf-8-sig") as txt_file:
+   output = txt_file.read()
 
 # converts .txt file input into a list
 list = output.split()
 
 # keeps track of the line we are on in the text
-current_line = None
+current_line = 1  # Start with line 1 instead of None
 
 # {word : number of occurrences, [lines of occurrence]}
 dictionary = {}
@@ -100,16 +104,31 @@ for word in list:
       dictionary.update({word : [int(1), [int(current_line)]]})
 
 # writes the dictionary to a csv file, every word has its own line
-output_file = input_file + "-table" + ".csv"
+# Remove .txt extension and path before adding -table.csv
+base_name = os.path.basename(input_file).replace('.txt', '')
+output_file = "transcription_tables/" + base_name + "-table.csv"
 try:
    with open(output_file, "w", newline="") as file:
       # writing the header manually
       file.write("word,number of occurrences,lines\n")  
       for word in dictionary:
-         line = f"{word},{dictionary[word][0]},\"[{', '.join(map(str, dictionary[word][1]))}]\"\n"
+         # Use simple commas to separate line numbers, enclosed in quotes
+         line_numbers = [str(line_num) for line_num in dictionary[word][1]]
+         comma_line_numbers = ', '.join(line_numbers)
+         line = f"{word},{dictionary[word][0]},\"[{comma_line_numbers}]\"\n"
          # line will be written as 
-            # {word, number of occurrences, "[line numbers]"} 
-            # for automatic detection by google sheets
+            # {word, number of occurrences, [line numbers]} 
+            # with comma-separated line numbers
          file.write(line)
 except Exception as e:
         print(f"Unable to output table: {e}")
+
+
+"""   TABLE OUTPUT
+
+word (transliteration), morphemic breakdown, morphemic order, translation, number of occurrences, text #, lines
+
+alphabetize them at the end 
+
+
+"""
