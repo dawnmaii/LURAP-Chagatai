@@ -122,13 +122,3 @@ try:
          file.write(line)
 except Exception as e:
         print(f"Unable to output table: {e}")
-
-
-"""   TABLE OUTPUT
-
-word (transliteration), morphemic breakdown, morphemic order, translation, number of occurrences, text #, lines
-
-alphabetize them at the end 
-
-
-"""

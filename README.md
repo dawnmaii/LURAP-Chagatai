@@ -1,4 +1,4 @@
-# LURAP-Chagatai: Chagatai Text Morphological Analysis
+# Chagatai Text Morphological Analysis
 
 ## What This Tool Does
 
@@ -19,14 +19,11 @@ For example, a word like `maḥkamesindegi` gets analyzed as:
 
 ### Step 1: Prepare Your Text File
 
-1. **Download** your Chagatai transcription as a plain text file (`.txt` format)
-
-2. **Place the file** in the `transcriptions` folder
+1. **Download the code** in this Github repository (`<> Code` → `Download ZIP`).
+2. **Double-click on the zip file** to unzip it, and move the folder to whereever you're doing your work.
+3. **Download** **your Chagatai transcription** as a plain text file (`.txt` format)
+4. **Place the file** in the `transcriptions` folder
    - If the folder doesn't exist, create it
-
-3. **Create the folder** `transcription_tables` if you haven't already
-
-4. **Create the folder** `morphological_analysis` if you haven't already
 
 At the end, your folder structure should look like this:
 
@@ -35,22 +32,18 @@ At the end, your folder structure should look like this:
 ├── 📁 transcriptions/
 │   ├── 📄 transcription.txt
 │   └── 📄 (other .txt files...)
-├── 📁 transcription_tables/
-│   ├── 📊 transcription_table.csv
-│   └── 📊 (other .csv files...)
-├── 📁 morphological_analysis/
-│   ├── 📊 morphological_analysis.csv
-│   └── 📊 (other analysis files...)
+├── 📄 analyze_all_text.bash
+├── 📄 analyze_file.bash
+├── 📄 analyze_all_text.sh
+│   📄 analyze_file.sh
+├── 📄 analyze_all_text.bat
+├── 📄 analyze_file.bat
 ├── 📄 morphological_analyzer.py
 ├── 📄 create_list.py
 └── 📄 README.md
 ```
 
-**Folder Purposes:**
-
-- **`transcriptions/`** - Contains your original Chagatai text files (`.txt` format)
-- **`transcription_tables/`** - Contains word frequency tables (`.csv` format) created by `create_list.py`
-- **`morphological_analysis/`** - Contains morphological analysis results (`.csv` format) created by `morphological_analyzer.py`
+You can delete the other four scripts if you wish and keep the two most relevant to you; I just put them all in the same place for easy finding.
 
 ### Step 2: Choose Your Analysis Method
 
@@ -71,7 +64,7 @@ You have two options:
 - **Command to type**:
   - **On Mac/Linux**: `bash analyze_file.sh text#`
   - **On Windows**: `analyze_file.bat text#`
-  - **Note**: Replace `text#` with whatever part of your filename you want to match (usually the "text.." part in between the hyphen)
+  - **Note**: Replace `text#` with whatever part of your filename you want to match (usually the "text..." part in between the hyphens of the filename)
 
 ### Step 3: Run the Analysis
 
@@ -98,21 +91,22 @@ The CSV files are much easier to read and analyze when opened in Google Sheets. 
 ### Step-by-Step Google Sheets Upload
 
 1. **Access the preferred spreadsheet in the LURAP folder**
-
 2. **Upload Your CSV File**
+
    - **Method 1 (Drag & Drop)**:
+
      - Open the `morphological_analysis` folder on your computer
      - Drag the CSV file directly onto the Google Sheets tab
-
    - **Method 2 (File Menu)**:
+
      - In Google Sheets, click `File` → `Import`
      - Click `Upload` and select your CSV file
      - Choose `Replace current sheet` from the `Import Location` dropdown menu
      - Make sure the `Convert text to numbers, dates, and formulas` option is CHECKED
      - Leave the `Separator Type` alone
      - Click `Import data`
-
 3. **Format Your Results**
+
    - **Freeze the header row**: Click on row 1, then `View` → `Freeze` → `1 row`
    - **Adjust column widths**: Double-click the line between column headers to auto-fit
    - **Add filters**: Click on row 1, then `Data` → `Create a filter`
@@ -123,13 +117,13 @@ The CSV files are much easier to read and analyze when opened in Google Sheets. 
 
 Each result file contains a table with these columns:
 
-| Column | What It Shows | Example |
-|--------|---------------|---------|
-| **word** | The original word from your text | `maḥkamesindegi` |
-| **root + affixes** | How the word breaks down | `maḥkame + sin[3POSS] + de[LOC] + gi[ADJ]` |
-| **occurrences** | How many times this word appears | `1` |
-| **lines** | Which line numbers contain this word | `[1]` |
-| **notes** | How the analysis was performed | `Turkic morpheme pattern matching` |
+| Column                   | What It Shows                        | Example                                       |
+| ------------------------ | ------------------------------------ | --------------------------------------------- |
+| **word**           | The original word from your text     | `maḥkamesindegi`                           |
+| **root + affixes** | How the word breaks down             | `maḥkame + sin[3POSS] + de[LOC] + gi[ADJ]` |
+| **occurrences**    | How many times this word appears     | `1`                                         |
+| **lines**          | Which line numbers contain this word | `[1]`                                       |
+| **notes**          | How the analysis was performed       | `Turkic morpheme pattern matching`          |
 
 ## Extending the Morphological Analyzer
 
@@ -256,5 +250,4 @@ If you encounter issues:
 Most of the letter inventory is sourced from current (unpublished) research in LURAP with Prof. Mawkanuli, as well as the following textbooks on the subject matter:
 
 1. Bodrogligeti, András J. E. A Grammar of Chagatay. LINCOM EUROPA, 2001, [altaica.ru/LIBRARY/Bodrogligeti-2001-Chagatay.pdf](https://altaica.ru/LIBRARY/Bodrogligeti-2001-Chagatay.pdf).
-
 2. Schluessel, Eric. An Introduction to Chaghatay. Michigan Publishing, 2018, [quod.lib.umich.edu/m/maize/images/mpub10110094.pdf](https://quod.lib.umich.edu/m/maize/images/mpub10110094.pdf).

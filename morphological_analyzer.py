@@ -1,19 +1,4 @@
 #!/usr/bin/env python3
-"""
-Morphological Analyzer for 19th-century Qazaq/Uzbek Text
-This analyzer achieves 100% success rate using multiple strategies:
-
-STRATEGIES:
-1. Loanword Detection - Identifies Persian/Arabic and Russian loanwords
-2. Suffix Stripping - Traditional morphological analysis for native words
-3. Short Word Recognition - Handles very short words and postpositions
-4. Super Aggressive Analysis - Splits complex words when needed
-5. Trailing Hyphen Handling - Preserves base forms of hyphenated words
-
-USAGE:
-- Run the script to analyze all words from the CSV file
-- Results are automatically saved to CSV format
-"""
 
 import csv
 import re
@@ -350,7 +335,7 @@ class MorphologicalAnalyzer:
                 'notes': ['Turkic morpheme pattern matching']
             }
         return {'root': ''}
-    
+
     def _improved_suffix_stripping(self, word: str) -> Dict[str, any]:
         """Improved suffix stripping that respects morpheme boundaries"""
         # Sort affixes by length (longest first) to avoid over-segmentation
@@ -410,46 +395,46 @@ def analyze_csv_file(csv_file_path: str, analyzer_class) -> List[Dict[str, any]]
     results = []
     
     try:
-        with open(csv_file_path, 'r', encoding='utf-8') as file:
-            reader = csv.DictReader(file)
+    with open(csv_file_path, 'r', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        
+        # Check if required columns exist
+        if 'word' not in reader.fieldnames:
+            raise ValueError("CSV must contain a 'word' column")
+        
+        # Try to find occurrence and line columns with flexible names
+        occurrence_col = None
+        line_col = None
+        
+        for col in reader.fieldnames:
+            if 'occurrence' in col.lower() or 'count' in col.lower() or 'frequency' in col.lower():
+                occurrence_col = col
+            if 'line' in col.lower() or 'lines' in col.lower():
+                line_col = col
+        
+        for row in reader:
+            word = row['word']
+            analysis = analyzer.analyze_word(word)
             
-            # Check if required columns exist
-            if 'word' not in reader.fieldnames:
-                raise ValueError("CSV must contain a 'word' column")
+            # Add occurrences if column exists
+            if occurrence_col:
+                analysis['occurrences'] = row[occurrence_col]
+            else:
+                analysis['occurrences'] = '1'
             
-            # Try to find occurrence and line columns with flexible names
-            occurrence_col = None
-            line_col = None
-            
-            for col in reader.fieldnames:
-                if 'occurrence' in col.lower() or 'count' in col.lower() or 'frequency' in col.lower():
-                    occurrence_col = col
-                if 'line' in col.lower() or 'lines' in col.lower():
-                    line_col = col
-            
-            for row in reader:
-                word = row['word']
-                analysis = analyzer.analyze_word(word)
-                
-                # Add occurrences if column exists
-                if occurrence_col:
-                    analysis['occurrences'] = row[occurrence_col]
-                else:
-                    analysis['occurrences'] = '1'
-                
-                # Add lines if column exists
-                if line_col:
+            # Add lines if column exists
+            if line_col:
                     # Clean and format line numbers to avoid CSV parsing issues
                     lines_str = row[line_col]
                     # Remove any problematic characters and ensure clean format
                     lines_str = lines_str.replace('\\', '').replace('"', '').strip()
                     analysis['lines'] = lines_str
-                else:
-                    analysis['lines'] = '[1]'
-                    
-                results.append(analysis)
-        
-        return results
+            else:
+                analysis['lines'] = '[1]'
+                
+            results.append(analysis)
+    
+    return results
         
     except FileNotFoundError:
         raise FileNotFoundError(f"Input file '{csv_file_path}' not found. Please check the file path.")
@@ -494,8 +479,8 @@ def main():
     
     # Analyze all words with comprehensive error handling
     try:
-        results = analyze_csv_file(csv_file, analyzer_class)
-        
+    results = analyze_csv_file(csv_file, analyzer_class)
+    
         # Separate recognized and unrecognized words
         recognized_results = []
         unrecognized_results = []
