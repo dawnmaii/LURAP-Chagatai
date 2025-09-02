@@ -393,49 +393,48 @@ def analyze_csv_file(csv_file_path: str, analyzer_class) -> List[Dict[str, any]]
     """Analyze all words from CSV file using specified analyzer"""
     analyzer = analyzer_class()
     results = []
-    
     try:
-    with open(csv_file_path, 'r', encoding='utf-8') as file:
-        reader = csv.DictReader(file)
-        
-        # Check if required columns exist
-        if 'word' not in reader.fieldnames:
-            raise ValueError("CSV must contain a 'word' column")
-        
-        # Try to find occurrence and line columns with flexible names
-        occurrence_col = None
-        line_col = None
-        
-        for col in reader.fieldnames:
-            if 'occurrence' in col.lower() or 'count' in col.lower() or 'frequency' in col.lower():
-                occurrence_col = col
-            if 'line' in col.lower() or 'lines' in col.lower():
-                line_col = col
-        
-        for row in reader:
-            word = row['word']
-            analysis = analyzer.analyze_word(word)
+        with open(csv_file_path, 'r', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
             
-            # Add occurrences if column exists
-            if occurrence_col:
-                analysis['occurrences'] = row[occurrence_col]
-            else:
-                analysis['occurrences'] = '1'
+            # Check if required columns exist
+            if 'word' not in reader.fieldnames:
+                raise ValueError("CSV must contain a 'word' column")
             
-            # Add lines if column exists
-            if line_col:
+            # Try to find occurrence and line columns with flexible names
+            occurrence_col = None
+            line_col = None
+            
+            for col in reader.fieldnames:
+                if 'occurrence' in col.lower() or 'count' in col.lower() or 'frequency' in col.lower():
+                    occurrence_col = col
+                if 'line' in col.lower() or 'lines' in col.lower():
+                    line_col = col
+            
+            for row in reader:
+                word = row['word']
+                analysis = analyzer.analyze_word(word)
+                
+                # Add occurrences if column exists
+                if occurrence_col:
+                    analysis['occurrences'] = row[occurrence_col]
+                else:
+                    analysis['occurrences'] = '1'
+                
+                # Add lines if column exists
+                if line_col:
                     # Clean and format line numbers to avoid CSV parsing issues
                     lines_str = row[line_col]
                     # Remove any problematic characters and ensure clean format
                     lines_str = lines_str.replace('\\', '').replace('"', '').strip()
                     analysis['lines'] = lines_str
-            else:
-                analysis['lines'] = '[1]'
-                
-            results.append(analysis)
-    
-    return results
+                else:
+                    analysis['lines'] = '[1]'
+                    
+                results.append(analysis)
         
+        return results
+            
     except FileNotFoundError:
         raise FileNotFoundError(f"Input file '{csv_file_path}' not found. Please check the file path.")
     except UnicodeDecodeError:
@@ -479,8 +478,8 @@ def main():
     
     # Analyze all words with comprehensive error handling
     try:
-    results = analyze_csv_file(csv_file, analyzer_class)
-    
+        results = analyze_csv_file(csv_file, analyzer_class)
+        
         # Separate recognized and unrecognized words
         recognized_results = []
         unrecognized_results = []
